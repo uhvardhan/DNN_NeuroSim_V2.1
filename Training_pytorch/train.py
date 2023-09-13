@@ -20,7 +20,7 @@ from modules.quantization_cpu_np_infer import QConv2d,QLinear
 parser = argparse.ArgumentParser(description='PyTorch CIFAR-X Example')
 parser.add_argument('--type', default='cifar10', help='dataset for training')
 parser.add_argument('--batch_size', type=int, default=200, help='input batch size for training (default: 64)')
-parser.add_argument('--epochs', type=int, default=257, help='number of epochs to train (default: 10)')
+parser.add_argument('--epochs', type=int, default=10, help='number of epochs to train (default: 10)')
 parser.add_argument('--grad_scale', type=float, default=1, help='learning rate for wage delta calculation')
 parser.add_argument('--seed', type=int, default=117, help='random seed (default: 1)')
 parser.add_argument('--log_interval', type=int, default=100,  help='how many batches to wait before logging training status')
@@ -255,7 +255,7 @@ try:
             logger('\tEpoch {} Test set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)'.format(
                 epoch, test_loss, correct, len(test_loader.dataset), acc))
             accuracy = acc.cpu().data.numpy()
-            np.savetxt(out, [[epoch, test_loss, accuracy]], delimiter=",",fmt='%f')
+            np.savetxt(out, [[epoch, test_loss.cpu().data.numpy(), accuracy]], delimiter=",",fmt='%f')
             
             if acc > best_acc:
                 new_file = os.path.join(args.logdir, 'best-{}.pth'.format(epoch))
