@@ -1,2 +1,0 @@
-L_forward (s),L_activation gradient (s),L_weight gradient (s),L_weight update (s),E_forward (J),E_activation gradient (J),E_weight gradient (J),E_weight update (J),L_forward_Peak (s),L_activation gradient_Peak (s),L_weight gradient_Peak (s),L_weight update_Peak (s),E_forward_Peak (J),E_activation gradient_Peak (J),E_weight gradient_Peak (J),E_weight update_Peak (J),TOPS/W,TOPS,Peak TOPS/W,Peak TOPS
-37.9415,30.1856,53.2732,0.406618,1.27778,1.21859,84.4908,0.00177051,6.90384,6.99342,34.7014,0.379786,0.544018,0.539272,8.44698,0.000455268,2.11965,1.51405,19.3502,3.76536
