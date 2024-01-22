@@ -90,10 +90,10 @@ Param::Param() {
 	reLu = true;                // false: sigmoid
 								// true: reLu
 								
-	novelMapping = false;        // false: conventional mapping
+	novelMapping = true;        // false: conventional mapping
 								// true: novel mapping
 	
-	SARADC = true;              // false: MLSA
+	SARADC = false;              // false: MLSA
 	                            // true: sar ADC
 	currentMode = true;         // false: MLSA use VSA
 	                            // true: MLSA use CSA
@@ -135,7 +135,7 @@ Param::Param() {
 	relaxArrayCellWidth = 0;            // relax ArrayCellWidth or not
 	
 	numColMuxed = 8;                    // How many columns share 1 ADC (for eNVM and FeFET) or parallel SRAM
-	levelOutput = 32;                  // # of levels of the multilevelSenseAmp output, should be in 2^N forms; e.g. 32 levels --> 5-bit ADC
+	levelOutput = 64;                  // # of levels of the multilevelSenseAmp output, should be in 2^N forms; e.g. 32 levels --> 5-bit ADC
 	cellBit = 5;                        // precision of memory device 
 	
 	/*** parameters for SRAM ***/

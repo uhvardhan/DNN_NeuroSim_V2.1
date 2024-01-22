@@ -19,9 +19,9 @@ from modules.quantization_cpu_np_infer import QConv2d,QLinear
 
 parser = argparse.ArgumentParser(description='PyTorch CIFAR-X Example')
 parser.add_argument('--type', default='cifar10', help='dataset for training')
-parser.add_argument('--batch_size', type=int, default=200, help='input batch size for training (default: 64)')
-parser.add_argument('--epochs', type=int, default=125, help='number of epochs to train (default: 10)')
-parser.add_argument('--grad_scale', type=float, default=0.1, help='learning rate for wage delta calculation')
+parser.add_argument('--batch_size', type=int, default=64, help='input batch size for training (default: 64)')
+parser.add_argument('--epochs', type=int, default=257, help='number of epochs to train (default: 10)')
+parser.add_argument('--grad_scale', type=float, default=1, help='learning rate for wage delta calculation')
 parser.add_argument('--seed', type=int, default=117, help='random seed (default: 1)')
 parser.add_argument('--log_interval', type=int, default=100,  help='how many batches to wait before logging training status')
 parser.add_argument('--test_interval', type=int, default=1,  help='how many epochs to wait before another test')
@@ -32,10 +32,10 @@ parser.add_argument('--wl_grad', type = int, default=8)
 parser.add_argument('--wl_activate', type = int, default=8)
 parser.add_argument('--wl_error', type = int, default=8)
 parser.add_argument('--inference', default=0)
-parser.add_argument('--onoffratio', default=10)
+parser.add_argument('--onoffratio', default=19.57)
 parser.add_argument('--cellBit', default=1)
 parser.add_argument('--subArray', default=128)
-parser.add_argument('--ADCprecision', default=5)
+parser.add_argument('--ADCprecision', default=3)
 parser.add_argument('--vari', default=0)
 parser.add_argument('--t', default=0)
 parser.add_argument('--v', default=0)
@@ -55,8 +55,8 @@ args.cellBit = 5              # cell precision (in V2.0, we only support one-cel
 args.max_level = 32           # Maximum number of conductance states during weight update (floor(log2(max_level))=cellBit) 
 args.c2cVari = 0.000          # cycle-to-cycle variation
 args.d2dVari = 0.0            # device-to-device variation
-args.nonlinearityLTP = 0.67   # nonlinearity in LTP
-args.nonlinearityLTD = -1.5   # nonlinearity in LTD (negative if LTP and LTD are asymmetric)
+args.nonlinearityLTP = 0.90   # nonlinearity in LTP
+args.nonlinearityLTD = -1.33   # nonlinearity in LTD (negative if LTP and LTD are asymmetric)
 
 # momentum
 gamma = 0.9
@@ -109,7 +109,7 @@ model = model.cifar10(args = args, logger=logger)
 if args.cuda:
     model.cuda()
 
-optimizer = optim.SGD(model.parameters(), lr=0.1)
+optimizer = optim.SGD(model.parameters(), lr=1)
 
 decreasing_lr = list(map(int, args.decreasing_lr.split(',')))
 logger('decreasing_lr: ' + str(decreasing_lr))
