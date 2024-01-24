@@ -135,7 +135,7 @@ Param::Param() {
 	relaxArrayCellWidth = 0;            // relax ArrayCellWidth or not
 	
 	numColMuxed = 8;                    // How many columns share 1 ADC (for eNVM and FeFET) or parallel SRAM
-	levelOutput = 64;                  // # of levels of the multilevelSenseAmp output, should be in 2^N forms; e.g. 32 levels --> 5-bit ADC
+	levelOutput = 32;                  // # of levels of the multilevelSenseAmp output, should be in 2^N forms; e.g. 32 levels --> 5-bit ADC
 	cellBit = 5;                        // precision of memory device 
 	
 	/*** parameters for SRAM ***/
@@ -160,9 +160,8 @@ Param::Param() {
 	// resistanceOff = 240e3*100;           // Roff resistance at Vr in the reported measurement dat (need to recalculate below if considering the nonlinearity)
 	// maxConductance = (double) 1/resistanceOn;
 	// minConductance = (double) 1/resistanceOff;
-
-	maxConductance = 9.30e-5;
-	minConductance = 4.75e-6;
+	maxConductance = 9.30e-05;		  // Maximum cell conductance, which is used to calculate the weight of the neural network
+	minConductance = 4.75e-06;		  // Minimum cell conductance, which is used to calculate the weight of the neural network
 	resistanceOn = (double) 1/maxConductance;
 	resistanceOff = (double) 1/minConductance;
 	gateCapFeFET = 2.1717e-18;	        // Gate capacitance of FeFET (F)

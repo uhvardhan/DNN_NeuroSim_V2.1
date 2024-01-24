@@ -12,6 +12,7 @@ from utee import wage_util
 from datetime import datetime
 from utee import wage_quantizer
 from utee import hook
+from cifar import densenet
 import numpy as np
 import csv
 from subprocess import call
@@ -20,7 +21,7 @@ from modules.quantization_cpu_np_infer import QConv2d,QLinear
 parser = argparse.ArgumentParser(description='PyTorch CIFAR-X Example')
 parser.add_argument('--type', default='cifar10', help='dataset for training')
 parser.add_argument('--batch_size', type=int, default=64, help='input batch size for training (default: 64)')
-parser.add_argument('--epochs', type=int, default=257, help='number of epochs to train (default: 10)')
+parser.add_argument('--epochs', type=int, default=101, help='number of epochs to train (default: 10)')
 parser.add_argument('--grad_scale', type=float, default=1, help='learning rate for wage delta calculation')
 parser.add_argument('--seed', type=int, default=117, help='random seed (default: 1)')
 parser.add_argument('--log_interval', type=int, default=100,  help='how many batches to wait before logging training status')
@@ -33,9 +34,9 @@ parser.add_argument('--wl_activate', type = int, default=8)
 parser.add_argument('--wl_error', type = int, default=8)
 parser.add_argument('--inference', default=0)
 parser.add_argument('--onoffratio', default=19.57)
-parser.add_argument('--cellBit', default=1)
+parser.add_argument('--cellBit', default=5)
 parser.add_argument('--subArray', default=128)
-parser.add_argument('--ADCprecision', default=3)
+parser.add_argument('--ADCprecision', default=5)
 parser.add_argument('--vari', default=0)
 parser.add_argument('--t', default=0)
 parser.add_argument('--v', default=0)
@@ -53,7 +54,7 @@ args.wl_weight = 5            # weight precision
 args.wl_grad = 5              # gradient precision
 args.cellBit = 5              # cell precision (in V2.0, we only support one-cell-per-synapse, i.e. cellBit==wl_weight==wl_grad)
 args.max_level = 32           # Maximum number of conductance states during weight update (floor(log2(max_level))=cellBit) 
-args.c2cVari = 0.000          # cycle-to-cycle variation
+args.c2cVari = 0.0          # cycle-to-cycle variation
 args.d2dVari = 0.0            # device-to-device variation
 args.nonlinearityLTP = 0.90   # nonlinearity in LTP
 args.nonlinearityLTD = -1.33   # nonlinearity in LTD (negative if LTP and LTD are asymmetric)
@@ -105,11 +106,12 @@ if args.cuda:
 # data loader and model
 assert args.type in ['cifar10', 'cifar100'], args.type
 train_loader, test_loader = dataset.get10(batch_size=args.batch_size, num_workers=1)
-model = model.cifar10(args = args, logger=logger)
+# model = model.cifar10(args = args, logger=logger)
+model = densenet.DenseNet(args, logger, depth=40, growth_rate=12, reduction=0.5, num_classes = 10)
 if args.cuda:
     model.cuda()
 
-optimizer = optim.SGD(model.parameters(), lr=1)
+optimizer = optim.SGD(model.parameters(), lr=0.1)
 
 decreasing_lr = list(map(int, args.decreasing_lr.split(',')))
 logger('decreasing_lr: ' + str(decreasing_lr))
@@ -218,12 +220,14 @@ try:
         print(delta_mean)
 
         h = 0
-        for i, layer in enumerate(model.features.modules()):
+        # for i, layer in enumerate(model.features.modules()):
+        for i, layer in enumerate(model.modules()):
             if isinstance(layer, QConv2d) or isinstance(layer,QLinear):
                 weight_file_name =  './layer_record/weightOld' + str(layer.name) + '.csv'
                 hook.write_matrix_weight( (oldWeight[h]).cpu().data.numpy(),weight_file_name)
                 h = h+1
-        for i, layer in enumerate(model.classifier.modules()):
+        # for i, layer in enumerate(model.classifier.modules()):
+        for i, layer in enumerate(model.modules()):
             if isinstance(layer, QLinear):
                 weight_file_name =  './layer_record/weightOld' + str(layer.name) + '.csv'
                 hook.write_matrix_weight( (oldWeight[h]).cpu().data.numpy(),weight_file_name)
