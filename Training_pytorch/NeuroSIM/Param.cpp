@@ -158,8 +158,8 @@ Param::Param() {
 	
 	maxConductance = 1.871174036e-05;
 	minConductance = 1.556742554e-06;
-	resistanceOn = (double) 1/resistanceOn;               // Ron resistance at Vr in the reported measurement data (need to recalculate below if considering the nonlinearity)
-	resistanceOff = (double) 1/resistanceOff;           // Roff resistance at Vr in the reported measurement dat (need to recalculate below if considering the nonlinearity)
+	resistanceOn = (double) 1/maxConductance;               // Ron resistance at Vr in the reported measurement data (need to recalculate below if considering the nonlinearity)
+	resistanceOff = (double) 1/minConductance;           // Roff resistance at Vr in the reported measurement dat (need to recalculate below if considering the nonlinearity)
 	gateCapFeFET = 2.1717e-18;	        // Gate capacitance of FeFET (F)
 	polarization = 20;                  // polarization of FeFET (uC/cm^2)
 	maxNumLevelLTP = 16;	            // Maximum number of conductance states during LTP or weight increase
