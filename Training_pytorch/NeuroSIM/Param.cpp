@@ -156,16 +156,16 @@ Param::Param() {
 	heightInFeatureSizeCrossbar = 2;    // Crossbar Cell height in feature size
 	widthInFeatureSizeCrossbar = 2;     // Crossbar Cell width in feature size
 	
-	resistanceOn = 240e3;               // Ron resistance at Vr in the reported measurement data (need to recalculate below if considering the nonlinearity)
-	resistanceOff = 240e3*100;           // Roff resistance at Vr in the reported measurement dat (need to recalculate below if considering the nonlinearity)
-	maxConductance = (double) 1/resistanceOn;
-	minConductance = (double) 1/resistanceOff;
+	maxConductance = 5.975354323e-06;               // Ron resistance at Vr in the reported measurement data (need to recalculate below if considering the nonlinearity)
+	minConductance = 7.2225e-07;           // Roff resistance at Vr in the reported measurement dat (need to recalculate below if considering the nonlinearity)
+	resistanceOn = (double) 1/maxConductance;
+	resistanceOff = (double) 1/minConductance;
 	gateCapFeFET = 2.1717e-18;	        // Gate capacitance of FeFET (F)
 	polarization = 20;                  // polarization of FeFET (uC/cm^2)
-	maxNumLevelLTP = 60;	            // Maximum number of conductance states during LTP or weight increase
-	maxNumLevelLTD = 60;	            // Maximum number of conductance states during LTD or weight decrease
-	writeVoltage = 4;
-	writePulseWidth = 50e-9;
+	maxNumLevelLTP = 32;	            // Maximum number of conductance states during LTP or weight increase
+	maxNumLevelLTD = 32;	            // Maximum number of conductance states during LTD or weight decrease
+	writeVoltage = 1.0;
+	writePulseWidth = 0.1;
 	nonlinearIV = false; 				// This option is to consider I-V nonlinearity in cross-point array or not
 	nonlinearity = 10; 					// This is the nonlinearity for the current ratio at Vw and Vw/2
 	

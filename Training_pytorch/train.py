@@ -47,17 +47,25 @@ parser.add_argument('--nonlinearityLTD', default=-0.01)
 parser.add_argument('--max_level', default=100)
 parser.add_argument('--d2dVari', default=0)
 parser.add_argument('--c2cVari', default=0)
+parser.add_argument('--maxConductance', default=0.0)
+parser.add_argument('--minConductance', default=0.0)
 current_time = datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
 
 args = parser.parse_args()
-args.wl_weight = 5            # weight precision
-args.wl_grad = 5              # gradient precision
-args.cellBit = 5              # cell precision (in V2.0, we only support one-cell-per-synapse, i.e. cellBit==wl_weight==wl_grad)
+args.epochs = 100             # number of epochs
+args.decreasing_lr = '70,90'  # learning rate decay
+args.wl_weight = 8            # weight precision
+args.wl_grad = 8              # gradient precision
+args.wl_activate = 8          # activation precision
+args.wl_error = 8             # error precision
+args.onoffratio = 8.273249322256836  # ON/OFF ratio
+args.cellBit = 8              # cell precision (in V2.0, we only support one-cell-per-synapse, i.e. cellBit==wl_weight==wl_grad)
+# args.subArray = 64            # number of cells in a sub-array
+args.nonlinearityLTP = -2.31   # nonlinearity in LTP
+args.nonlinearityLTD = -2.62   # nonlinearity in LTD (negative if LTP and LTD are asymmetric)
 args.max_level = 32           # Maximum number of conductance states during weight update (floor(log2(max_level))=cellBit) 
-args.c2cVari = 0.003          # cycle-to-cycle variation
+args.c2cVari = 0.0            # cycle-to-cycle variation
 args.d2dVari = 0.0            # device-to-device variation
-args.nonlinearityLTP = 1.75   # nonlinearity in LTP
-args.nonlinearityLTD = 1.46   # nonlinearity in LTD (negative if LTP and LTD are asymmetric)
 
 # momentum
 gamma = 0.9
@@ -110,7 +118,10 @@ model = model.cifar10(args = args, logger=logger)
 if args.cuda:
     model.cuda()
 
-optimizer = optim.SGD(model.parameters(), lr=1)
+# Adam optimizer
+optimizer = optim.Adam(model.parameters(), lr=1e-4, eps=1e-8)
+# Stochastic Gradient Descent
+# optimizer = optim.SGD(model.parameters(), lr=1)
 
 decreasing_lr = list(map(int, args.decreasing_lr.split(',')))
 logger('decreasing_lr: ' + str(decreasing_lr))
