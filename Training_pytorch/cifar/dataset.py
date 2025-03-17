@@ -3,6 +3,7 @@ from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 import os
 
+# CIFAR-10 dataset loaders
 def get10(batch_size, data_root='/tmp/public_dataset/pytorch', train=True, val=True, **kwargs):
     data_root = os.path.expanduser(os.path.join(data_root, 'cifar10-data'))
     num_workers = kwargs.setdefault('num_workers', 1)
@@ -36,6 +37,7 @@ def get10(batch_size, data_root='/tmp/public_dataset/pytorch', train=True, val=T
     ds = ds[0] if len(ds) == 1 else ds
     return ds
 
+# CIFAR-100 dataset loaders
 def get100(batch_size, data_root='/tmp/public_dataset/pytorch', train=True, val=True, **kwargs):
     data_root = os.path.expanduser(os.path.join(data_root, 'cifar100-data'))
     num_workers = kwargs.setdefault('num_workers', 1)
